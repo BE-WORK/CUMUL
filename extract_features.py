@@ -49,8 +49,10 @@ def extract_features(csv_file):
 def extract(path_root, k, partition_num):
     """
     此函数将所有计算所有训练集和测试集的特征信息。
-    :param path_root:数据集所在的根目录。
-    :return:none
+    :param path_root: 数据集所在的根目录。
+    :param k: 第k次交叉验证。
+    :param partition_num: 指明以第partition_num个子集作为测试集。
+    :return: none
     """
     path_length = path_root + '/data_packet_length'
     path_cv_k = path_root + '/tmp/cross_validation_' + str(k) + '.csv'
@@ -63,17 +65,13 @@ def extract(path_root, k, partition_num):
     test_mark = []  # 标记测试集
     with open(path_cv_k, 'rb') as split_file:
         csv_reader = csv.reader(split_file)
-        for partition, f1, f2, f3, f4 in csv_reader:
-            if partition_num == int(partition[-1]):
-                test_mark.append(f1)
-                test_mark.append(f2)
-                test_mark.append(f3)
-                test_mark.append(f4)
+        for line in csv_reader:
+            if partition_num == int(line[0][-1]):
+                for f in line[1:]:
+                    test_mark.append(f)
             else:
-                train_mark.append(f1)
-                train_mark.append(f2)
-                train_mark.append(f3)
-                train_mark.append(f4)
+                for f in line[1:]:
+                    train_mark.append(f)
 
     train_features = []
     train_label = []
@@ -124,12 +122,11 @@ def extract(path_root, k, partition_num):
 
 def main():
     path = raw_input('Enter the root path of your data: ')
-    if path.find('\\'):  # 转化路径格式
-        path = path.replace('\\', '/')
     if path == '':
-        extract(r'C:\ScriptData\CUMUL_SVM', k=1, partition_num=1)
-    else:
-        extract(path, k=1, partition_num=1)
+        path = 'C:/ScriptData/CUMUL_SVM'
+    elif path.find('\\') != -1:  # 转换路径格式
+        path = path.replace('\\', '/')
+    extract(path, k=1, partition_num=1)
 
 
 if __name__ == '__main__':

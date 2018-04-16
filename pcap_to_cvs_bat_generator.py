@@ -41,12 +41,11 @@ def pcap_to_csv_bat_generator(path_root):
 
 def main():
     path = raw_input('Enter the root path of your data: ')
-    if path.find('\\'):  # 转换路径格式
-        path = path.replace('\\', '/')
     if path == '':
-        pcap_to_csv_bat_generator(path_root='C:/ScriptData/CUMUL_SVM')
-    else:
-        pcap_to_csv_bat_generator(path_root=path)
+        path = 'C:/ScriptData/CUMUL_SVM'
+    elif path.find('\\') != -1:  # 转换路径格式
+        path = path.replace('\\', '/')
+    pcap_to_csv_bat_generator(path_root=path)
 
 
 if __name__ == '__main__':

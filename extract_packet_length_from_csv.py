@@ -37,12 +37,11 @@ def extract_packet_length(path_root):
 
 def main():
     path = raw_input('Enter the root path of your data: ')
-    if path.find('\\'):  # 转换路径格式
-        path = path.replace('\\', '/')
     if path == '':
-        extract_packet_length(path_root='C:/ScriptData/CUMUL_SVM')
-    else:
-        extract_packet_length(path)
+        path = 'C:/ScriptData/CUMUL_SVM'
+    elif path.find('\\') != -1:  # 转换路径格式
+        path = path.replace('\\', '/')
+    extract_packet_length(path)
 
 
 if __name__ == '__main__':
